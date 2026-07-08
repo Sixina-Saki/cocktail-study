@@ -661,12 +661,35 @@ let wrongQuestions=[];
 let currentWrong=[];
 let retryMode=false;
 
+let stats=JSON.parse(localStorage.getItem("cocktailStats")||'{"plays":0,"correct":0,"wrong":0,"vol":{}}');
+
+function showStats(){
+let rate=(stats.correct+stats.wrong)>0?Math.round(stats.correct/(stats.correct+stats.wrong)*100):0;
+let volHtml="";
+for(let i=1;i<=8;i++){
+ const v=stats.vol[i]||{correct:0,total:0};
+ const vr=v.total?Math.round(v.correct/v.total*100):0;
+ volHtml+=`<div class="card">Vol${i}: ${v.correct}/${v.total} (${vr}%)</div>`;
+}
+document.getElementById("app").innerHTML=`
+<h1>成績表</h1>
+<div class="card">総プレイ回数: ${stats.plays}</div>
+<div class="card">総正解数: ${stats.correct}</div>
+<div class="card">総不正解数: ${stats.wrong}</div>
+<div class="card">総合正答率: ${rate}%</div>
+${volHtml}
+<button onclick="home()">トップ画面</button>
+`;
+}
+
+
 function home(){
 document.getElementById("app").innerHTML=`
 <h1>Cocktail Study</h1>
 ${[1,2,3,4,5,6,7,8].map(v=>`<label><input type="checkbox" class="vol" value="${v}" checked>Vol${v}</label><br>`).join("")}
 <button onclick="clearVol()">チェックボックスを全て外す</button>
-<button onclick="start()">順番学習</button>`;
+<button onclick="start()">順番学習</button>
+<button onclick="showStats()">成績表</button>`;
 }
 
 function clearVol(){
@@ -695,7 +718,7 @@ return s.toLowerCase()
 function show(){
 const q=pool[index];
 document.getElementById("app").innerHTML=`
-<button onclick="home()">ホーム</button>
+<button onclick="home()">トップ画面</button>
 <button onclick="back()">戻る</button>
 <div>${index+1}/${pool.length}</div>
 <h2>問題</h2>
@@ -752,7 +775,7 @@ document.getElementById("app").innerHTML=`
 <h1>${retryMode?"再挑戦結果":"採点結果"}</h1>
 <p>${pool.length}問中 ${correct}問正解</p>
 <p>正答率 ${Math.round(correct/pool.length*100)}%</p>
-<button onclick="home()">ホーム</button>
+<button onclick="home()">トップ画面</button>
 ${(wrongQuestions.length>0)?`<button onclick="retryWrong()">不正解${wrongQuestions.length}問を再挑戦</button>`:""}
 `;
 return;
