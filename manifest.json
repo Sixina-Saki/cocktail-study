@@ -1,8 +1,0 @@
-{
-  "name":"Cocktail Trainer",
-  "short_name":"Cocktail",
-  "display":"standalone",
-  "start_url":"./",
-  "background_color":"#111111",
-  "theme_color":"#111111"
-}
