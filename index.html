@@ -679,9 +679,27 @@ document.getElementById("app").innerHTML=`
 <div class="card">総合正答率: ${rate}%</div>
 ${volHtml}
 <button onclick="home()">トップ画面</button>
+<button onclick="resetStats()">成績リセット</button>
 `;
 }
 
+
+function resetStats(){
+if(confirm(
+"成績をリセットします。\n\n"+
+"・総プレイ回数\n"+
+"・総正解数\n"+
+"・総不正解数\n"+
+"・Vol別成績\n"+
+"・総合正答率\n\n"+
+"この操作は元に戻せません。\n\n"+
+"本当にリセットしますか？"
+)){
+stats={plays:0,correct:0,wrong:0,vol:{}};
+localStorage.setItem("cocktailStats",JSON.stringify(stats));
+showStats();
+}
+}
 
 function home(){
 document.getElementById("app").innerHTML=`
@@ -705,6 +723,8 @@ answered=[];
 wrongQuestions=[];
 currentWrong=[];
 retryMode=false;
+stats.plays++;
+localStorage.setItem("cocktailStats",JSON.stringify(stats));
 if(pool.length===0){alert("Volを選択してください");return;}
 show();
 }
@@ -747,11 +767,24 @@ const tokens=q.recipe.split("、").map(x=>normalize(x));
 const ok=tokens.every(t=>user.includes(t));
 
 answered[index]=true;
+
+stats.plays = stats.plays || 0;
+stats.correct = stats.correct || 0;
+stats.wrong = stats.wrong || 0;
+if(!stats.vol[q.vol]) stats.vol[q.vol]={correct:0,total:0};
+
+stats.vol[q.vol].total++;
+
 if(ok){
     correct++;
+    stats.correct++;
+    stats.vol[q.vol].correct++;
 }else{
     currentWrong.push(q);
+    stats.wrong++;
 }
+
+localStorage.setItem("cocktailStats",JSON.stringify(stats));
 
 document.getElementById("answer").style.display="none";
 document.getElementById("hintButton").style.display="none";
