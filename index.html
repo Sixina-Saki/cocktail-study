@@ -817,9 +817,47 @@ show();
 }
 
 function back(){
-if(index===0){alert("1問目の問題です");return;}
-index--;
-show();
+
+    if(index===0){
+        alert("1問目の問題です");
+        return;
+    }
+
+    const prevQuestion = pool[index-1];
+
+    if(answered[index-1]){
+
+        answered[index-1]=false;
+
+        if(stats.vol[prevQuestion.vol]){
+            stats.vol[prevQuestion.vol].total--;
+        }
+
+        const wasWrong=currentWrong.find(
+            q=>q.name===prevQuestion.name
+        );
+
+        if(wasWrong){
+            stats.wrong--;
+            currentWrong=currentWrong.filter(
+                q=>q.name!==prevQuestion.name
+            );
+        }else{
+            stats.correct--;
+            if(stats.vol[prevQuestion.vol]){
+                stats.vol[prevQuestion.vol].correct--;
+            }
+            correct--;
+        }
+
+        localStorage.setItem(
+            "cocktailStats",
+            JSON.stringify(stats)
+        );
+    }
+
+    index--;
+    show();
 }
 
 
