@@ -1,10 +1,11 @@
 <!doctype html><html lang="ja"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Cocktail Study</title>
 <style>
 body{background:#111;color:#fff;font-family:sans-serif;padding:20px}button{width:100%;padding:12px;margin:6px 0;border-radius:10px}.card{background:#222;padding:15px;border-radius:12px;margin-top:12px}
+html,body,input,button,textarea,select{-webkit-touch-callout:none;touch-action:manipulation;}
 </style>
 </head><body>
 <div id="app"></div>
@@ -660,6 +661,7 @@ let selected=[],pool=[],index=0,correct=0,answered=[];
 let wrongQuestions=[];
 let currentWrong=[];
 let retryMode=false;
+let quizMode="text";
 
 let stats=JSON.parse(localStorage.getItem("cocktailStats")||'{"plays":0,"correct":0,"wrong":0,"vol":{}}');
 
@@ -707,8 +709,27 @@ document.getElementById("app").innerHTML=`
 ${[1,2,3,4,5,6,7,8].map(v=>`<label><input type="checkbox" class="vol" value="${v}" checked>Vol${v}</label><br>`).join("")}
 <button onclick="clearVol()">チェックボックスを全て外す</button>
 <button onclick="start()">順番学習</button>
+<button onclick="startChoiceMode()">四択学習</button>
 <button onclick="showStats()">成績表</button>`;
 }
+
+
+function startChoiceMode(){
+quizMode="choice";
+selected=[...document.querySelectorAll(".vol:checked")].map(x=>Number(x.value));
+pool=all.filter(x=>selected.includes(Number(x.vol)));
+index=0;
+correct=0;
+answered=[];
+wrongQuestions=[];
+currentWrong=[];
+retryMode=false;
+if(pool.length===0){alert("Volを選択してください");return;}
+stats.plays++;
+localStorage.setItem("cocktailStats",JSON.stringify(stats));
+showChoiceQuestion();
+}
+
 
 function clearVol(){
 document.querySelectorAll(".vol").forEach(v=>v.checked=false);
@@ -871,7 +892,143 @@ retryMode=true;
 show();
 }
 
+
+function shuffle(a){
+ return [...a].sort(()=>Math.random()-0.5);
+}
+
+function showChoiceQuestion(){
+ const q=pool[index];
+ const correctRecipe=q.recipe.split("、");
+ let materials=[...correctRecipe];
+
+ all.forEach(x=>{
+   x.recipe.split("、").forEach(r=>{
+      if(!materials.includes(r)) materials.push(r);
+   });
+ });
+
+ materials=shuffle(materials).slice(0,10-correctRecipe.length).concat(correctRecipe);
+ materials=shuffle(materials);
+
+ document.getElementById("app").innerHTML=`
+ <button onclick="home()">トップ画面</button>
+ <button onclick="back()">戻る</button>
+ <div>${index+1}/${pool.length}</div>
+ <h2>問題</h2>
+ <h1>${q.name}</h1>
+ <p>材料を選択してください</p>
+ ${materials.map((m,i)=>`<label><input type="checkbox" class="mat" value="${m}">${m}</label><br>`).join("")}
+ <button onclick="judgeChoice()">決定</button>`;
+}
+
+function judgeChoice(){
+ const q=pool[index];
+ const selectedMat=[...document.querySelectorAll(".mat:checked")].map(x=>x.value);
+ const answer=q.recipe.split("、");
+ const ok=answer.length===selectedMat.length && answer.every(x=>selectedMat.includes(x));
+
+ document.getElementById("app").innerHTML+=`
+ <hr>
+ <h2>${ok?"⭕ 正解":"❌ 不正解"}</h2>
+ <p>正解:${q.recipe}</p>
+ <p>付属:${q.garnish||"なし"}</p>
+ <button onclick="nextChoice()">次の問題</button>`;
+ if(ok) correct++;
+}
+
+function nextChoice(){
+ index++;
+ if(index>=pool.length){home();return;}
+ showChoiceQuestion();
+}
+
+
+let choiceRecipeOK=false;
+
+function judgeChoice(){
+ const q=pool[index];
+ const selectedMat=[...document.querySelectorAll(".mat:checked")].map(x=>x.value);
+ const answer=q.recipe.split("、");
+ choiceRecipeOK=(answer.length===selectedMat.length && answer.every(x=>selectedMat.includes(x)));
+
+ if(!q.garnish){
+    finishChoice(choiceRecipeOK,true);
+    return;
+ }
+
+ let garnishes=[q.garnish];
+ all.forEach(x=>{
+   if(x.garnish && !garnishes.includes(x.garnish)) garnishes.push(x.garnish);
+ });
+ garnishes=shuffle(garnishes).slice(0,4);
+ if(!garnishes.includes(q.garnish)) garnishes.push(q.garnish);
+ garnishes=shuffle(garnishes).slice(0,5);
+
+ document.getElementById("app").innerHTML=`
+ <button onclick="home()">トップ画面</button>
+ <h2>付属を選択してください</h2>
+ ${garnishes.map(g=>`<label><input type="radio" name="gar" value="${g}">${g}</label><br>`).join("")}
+ <button onclick="judgeGarnish()">決定</button>`;
+}
+
+function judgeGarnish(){
+ const q=pool[index];
+ const g=document.querySelector('input[name="gar"]:checked');
+ const garnishOK=g && g.value===q.garnish;
+ finishChoice(choiceRecipeOK,garnishOK);
+}
+
+function finishChoice(recipeOK,garnishOK){
+ const q=pool[index];
+ const ok=recipeOK && garnishOK;
+
+ if(!stats.vol[q.vol]) stats.vol[q.vol]={correct:0,total:0};
+ stats.vol[q.vol].total++;
+ if(ok){
+   correct++;
+   stats.correct++;
+   stats.vol[q.vol].correct++;
+ }else{
+   stats.wrong++;
+   currentWrong.push(q);
+ }
+ localStorage.setItem("cocktailStats",JSON.stringify(stats));
+
+ document.getElementById("app").innerHTML=`
+ <h2>${ok?"⭕ 正解":"❌ 不正解"}</h2>
+ <p>正解レシピ: ${q.recipe}</p>
+ <p>付属: ${q.garnish||"なし"}</p>
+ <p>グラス: ${q.glass}</p>
+ <p>${q.history||""}</p>
+ <button onclick="nextChoice()">次の問題</button>`;
+}
+
+function nextChoice(){
+ index++;
+ if(index>=pool.length){
+   document.getElementById("app").innerHTML=`
+   <h1>四択結果</h1>
+   <p>${pool.length}問中 ${correct}問正解</p>
+   <p>正答率 ${Math.round(correct/pool.length*100)}%</p>
+   <button onclick="home()">トップ画面</button>`;
+   return;
+ }
+ showChoiceQuestion();
+}
+
 window.onload=home;
 
+</script>
+
+<script>
+let lastTouchEnd=0;
+document.addEventListener('touchend',function(event){
+const now=(new Date()).getTime();
+if(now-lastTouchEnd<=300){
+event.preventDefault();
+}
+lastTouchEnd=now;
+},{passive:false});
 </script>
 </body></html>
