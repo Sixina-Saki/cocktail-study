@@ -782,7 +782,16 @@ showStats();
 function home(){
 document.getElementById("app").innerHTML=`
 <h1>Cocktail Study</h1>
-${[1,2,3,4,5,6,7,8].map(v=>`<label><input type="checkbox" class="vol" value="${v}" checked>Vol${v}</label><br>`).join("")}
+${[
+{v:1,n:"Vol1（定番）"},
+{v:2,n:"Vol2（ジン）"},
+{v:3,n:"Vol3（ウォッカ）"},
+{v:4,n:"Vol4（ラム・テキーラ）"},
+{v:5,n:"Vol5（ブランデー・ウイスキー）"},
+{v:6,n:"Vol6（ワイン）"},
+{v:7,n:"Vol7（リキュール）"},
+{v:8,n:"Vol8（ビア・ソフト）"}
+].map(x=>`<label><input type="checkbox" class="vol" value="${x.v}" checked>${x.n}</label><br>`).join("")}
 <button onclick="clearVol()">チェックボックスを全て外す</button>
 <button onclick="start()">順番学習</button>
 <button onclick="startChoiceMode()">十択学習</button>
