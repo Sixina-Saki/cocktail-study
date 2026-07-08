@@ -657,6 +657,8 @@ window.vol8 = [
 const all=[...(window.vol1||[]),...(window.vol2||[]),...(window.vol3||[]),...(window.vol4||[]),...(window.vol5||[]),...(window.vol6||[]),...(window.vol7||[]),...(window.vol8||[])];
 
 let selected=[],pool=[],index=0,correct=0,answered=[];
+let wrongQuestions=[];
+let retryMode=false;
 
 function home(){
 document.getElementById("app").innerHTML=`
@@ -671,6 +673,8 @@ pool=all.filter(x=>selected.includes(Number(x.vol)));
 index=0;
 correct=0;
 answered=[];
+wrongQuestions=[];
+retryMode=false;
 if(pool.length===0){alert("Volを選択してください");return;}
 show();
 }
@@ -714,6 +718,7 @@ const ok=tokens.every(t=>user.includes(t));
 
 answered[index]=true;
 if(ok) correct++;
+else wrongQuestions.push(q);
 
 document.getElementById("answer").style.display="none";
 document.getElementById("hintButton").style.display="none";
@@ -733,10 +738,12 @@ function next(){
 index++;
 if(index>=pool.length){
 document.getElementById("app").innerHTML=`
-<h1>採点結果</h1>
+<h1>${retryMode?"再挑戦結果":"採点結果"}</h1>
 <p>${pool.length}問中 ${correct}問正解</p>
 <p>正答率 ${Math.round(correct/pool.length*100)}%</p>
-<button onclick="home()">ホーム</button>`;
+<button onclick="home()">ホーム</button>
+${(!retryMode && wrongQuestions.length>0)?`<button onclick="retryWrong()">不正解${wrongQuestions.length}問を再挑戦</button>`:""}
+`;
 return;
 }
 show();
@@ -745,6 +752,17 @@ show();
 function back(){
 if(index===0){alert("1問目の問題です");return;}
 index--;
+show();
+}
+
+
+function retryWrong(){
+pool=[...wrongQuestions];
+wrongQuestions=[];
+index=0;
+correct=0;
+answered=[];
+retryMode=true;
 show();
 }
 
