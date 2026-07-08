@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Cocktail Study">
+<title>Cocktail Study</title>
+<style>
+body{font-family:sans-serif;max-width:800px;margin:auto;padding:20px}
+button{display:block;width:100%;padding:12px;margin:8px 0;font-size:16px}
+.card{border:1px solid #ccc;padding:16px;border-radius:10px}
+</style>
+</head>
+<body>
+<h1>カクテル学習</h1>
+<select id="vol">
+<option value="3">Vol.3</option>
+<option value="4">Vol.4</option>
+<option value="5">Vol.5</option>
+<option value="6">Vol.6</option>
+<option value="7">Vol.7</option>
+<option value="8">Vol.8</option>
+</select>
+<button onclick="newQuestion()">出題</button>
+<div class="card">
+<div id="question">Volを選んで出題してください</div>
+<div id="answers"></div>
+<div id="result"></div>
+</div>
+<script>
+const data={
+3:[{name:"ブラッディーメアリー",glass:"12oz",recipe:"ウォッカ40cc、トマト80cc",garnish:"Lマドラー、1/8レモン"}],
+4:[{name:"モヒート",glass:"コリンズ",recipe:"ラム30cc、ガムシロップ15cc、ライムJ10cc、ミントリーフ6枚、ソーダ30cc",garnish:"クラッシュアイス、ミントリーフ1枝、細口ストロー2本、1/8ライム絞り込み"}],
+5:[{name:"ゴッドファーザー",glass:"ファッション",recipe:"デュワーズ45cc、アマレット15cc",garnish:"ロック氷"}],
+6:[{name:"キール",glass:"フルート",recipe:"カシス20cc、シャルドネ100cc",garnish:"なし"}],
+7:[{name:"チャイナブルー",glass:"12oz",recipe:"パライソ30cc、GFJ30cc、トニック50cc、ブルーキュラソー10cc",garnish:"Lマドラー、1/16グレープフルーツ"}],
+8:[{name:"シャンディーガフ",glass:"小ピルスナー",recipe:"ジンジャーエール150cc、ドラフト150cc",garnish:"なし"}]
+};
+let current;
+function newQuestion(){
+ const vol=document.getElementById('vol').value;
+ current=data[vol][0];
+ document.getElementById('question').innerHTML=`${current.name}<br>グラス: ${current.glass}<br>レシピは？`;
+ const opts=[current.recipe,"ダミー1","ダミー2","ダミー3"].sort(()=>Math.random()-0.5);
+ document.getElementById('answers').innerHTML=opts.map((o,i)=>`<button onclick="answer(${i})">${o}</button>`).join('');
+ window.answerOptions=opts;
+ document.getElementById('result').innerHTML='';
+}
+function answer(index){
+ const selected=window.answerOptions[index];
+ document.getElementById('result').innerHTML=selected===current.recipe?
+ `正解！<br>付属:${current.garnish}`:
+ `不正解<br>正解:${current.recipe}<br>付属:${current.garnish}`;
+}
+</script>
+</body>
+</html>
