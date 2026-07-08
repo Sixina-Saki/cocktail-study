@@ -1,0 +1,33 @@
+
+body{
+    margin:0;
+    padding:16px;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:#111;
+    color:#fff;
+}
+#app{
+    max-width:800px;
+    margin:0 auto;
+}
+button{
+    width:100%;
+    min-height:56px;
+    margin:8px 0;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+}
+.question-card,.result-card,.statistics-screen,.settings-screen,
+.backup-screen,.home-screen,.vol-select,.mode-select{
+    padding:16px;
+    border-radius:16px;
+    margin-bottom:16px;
+    background:#1d1d1d;
+}
+textarea{
+    width:100%;
+    min-height:120px;
+    border-radius:12px;
+    margin:8px 0;
+}
