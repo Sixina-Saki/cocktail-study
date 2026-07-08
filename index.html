@@ -690,9 +690,9 @@ document.getElementById("app").innerHTML=`
 <h2>問題</h2>
 <h1>${q.name}</h1>
 <input id="answer" placeholder="レシピを入力">
-<button onclick="showHint()">ヒント（グラス表示）</button>
+<button id="hintButton" onclick="showHint()">ヒント（グラス表示）</button>
 <div id="hintArea"></div>
-<button onclick="judge()">解答する</button>`;
+<button id="answerButton" onclick="judge()">解答する</button>`;
 }
 
 
@@ -715,9 +715,13 @@ const ok=tokens.every(t=>user.includes(t));
 answered[index]=true;
 if(ok) correct++;
 
+document.getElementById("answer").style.display="none";
+document.getElementById("hintButton").style.display="none";
+document.getElementById("answerButton").style.display="none";
+
 document.getElementById("app").innerHTML+=`
 <hr>
-<h2>${ok?"○ 正解":"× 不正解"}</h2>
+<h2>${ok?"⭕ 正解":"❌ 不正解"}</h2>
 <p>正解: ${q.recipe}</p>
 <p>グラス: ${q.glass}</p>
 <p>付属: ${q.garnish||"なし"}</p>
