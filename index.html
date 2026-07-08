@@ -1,6 +1,6 @@
 <!doctype html><html lang="ja"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Cocktail Study</title>
 <style>
@@ -658,6 +658,7 @@ const all=[...(window.vol1||[]),...(window.vol2||[]),...(window.vol3||[]),...(wi
 
 let selected=[],pool=[],index=0,correct=0,answered=[];
 let wrongQuestions=[];
+let currentWrong=[];
 let retryMode=false;
 
 function home(){
@@ -674,6 +675,7 @@ index=0;
 correct=0;
 answered=[];
 wrongQuestions=[];
+currentWrong=[];
 retryMode=false;
 if(pool.length===0){alert("Volを選択してください");return;}
 show();
@@ -717,8 +719,11 @@ const tokens=q.recipe.split("、").map(x=>normalize(x));
 const ok=tokens.every(t=>user.includes(t));
 
 answered[index]=true;
-if(ok) correct++;
-else wrongQuestions.push(q);
+if(ok){
+    correct++;
+}else{
+    currentWrong.push(q);
+}
 
 document.getElementById("answer").style.display="none";
 document.getElementById("hintButton").style.display="none";
@@ -737,12 +742,13 @@ document.getElementById("app").innerHTML+=`
 function next(){
 index++;
 if(index>=pool.length){
+wrongQuestions=[...currentWrong];
 document.getElementById("app").innerHTML=`
 <h1>${retryMode?"再挑戦結果":"採点結果"}</h1>
 <p>${pool.length}問中 ${correct}問正解</p>
 <p>正答率 ${Math.round(correct/pool.length*100)}%</p>
 <button onclick="home()">ホーム</button>
-${(!retryMode && wrongQuestions.length>0)?`<button onclick="retryWrong()">不正解${wrongQuestions.length}問を再挑戦</button>`:""}
+${(wrongQuestions.length>0)?`<button onclick="retryWrong()">不正解${wrongQuestions.length}問を再挑戦</button>`:""}
 `;
 return;
 }
@@ -758,10 +764,10 @@ show();
 
 function retryWrong(){
 pool=[...wrongQuestions];
-wrongQuestions=[];
 index=0;
 correct=0;
 answered=[];
+currentWrong=[];
 retryMode=true;
 show();
 }
