@@ -1,0 +1,750 @@
+<!doctype html><html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Cocktail Study</title>
+<style>
+body{background:#111;color:#fff;font-family:sans-serif;padding:20px}button{width:100%;padding:12px;margin:6px 0;border-radius:10px}.card{background:#222;padding:15px;border-radius:12px;margin-top:12px}
+</style>
+</head><body>
+<div id="app"></div>
+
+
+
+<script>
+// GitHubへアップロードする際は、このファイル名を vol1.js に変更してください。
+
+window.vol1 = [
+{
+    vol:1,
+    name:"ウイスキー ロック",
+    glass:"ファッション",
+    recipe:"ウイスキー30cc（角は45cc）",
+    garnish:"",
+    history:"最も基本的なウイスキーの飲み方の一つ。"
+},
+{
+    vol:1,
+    name:"スピリッツ ロック",
+    glass:"ファッション",
+    recipe:"スピリッツ40cc",
+    garnish:"",
+    history:"ベーススピリッツをシンプルに味わう提供方法。"
+},
+{
+    vol:1,
+    name:"ヴェルモット ロック",
+    glass:"ファッション",
+    recipe:"各ヴェルモット60cc",
+    garnish:"",
+    history:"食前酒として親しまれてきたヴェルモットの定番提供方法。"
+},
+{
+    vol:1,
+    name:"チンザノ ハーフロック",
+    glass:"ファッション",
+    recipe:"ドライ30cc、ロッソ30cc",
+    garnish:"",
+    history:"ドライとロッソを半分ずつ使用するスタイル。"
+},
+{
+    vol:1,
+    name:"ウイスキー 水割り",
+    glass:"10oz",
+    recipe:"ウイスキー30cc（角は45cc）、水70cc",
+    garnish:"",
+    history:"日本独自に発展した代表的な飲み方。"
+},
+{
+    vol:1,
+    name:"ウイスキー ソーダ割り",
+    glass:"10oz",
+    recipe:"ウイスキー30cc（角は45cc）、ソーダ70cc",
+    garnish:"",
+    history:"ハイボールの基本形。"
+},
+{
+    vol:1,
+    name:"ウイスキー ハーフロック",
+    glass:"ファッション",
+    recipe:"ウイスキー30cc（角は45cc）、水30cc",
+    garnish:"",
+    history:"ロックと水割りの中間に位置する飲み方。"
+},
+{
+    vol:1,
+    name:"ウイスキー トワイスアップ",
+    glass:"ストレートグラス",
+    recipe:"ウイスキー30cc、水（常温）30cc",
+    garnish:"",
+    history:"香りが開きやすくテイスティングでも使われる。"
+},
+{
+    vol:1,
+    name:"ウイスキー ミスト",
+    glass:"ファッション",
+    recipe:"ウイスキー30cc（角は45cc）",
+    garnish:"クラッシュアイス",
+    history:"ミストは英語で霧を意味する。"
+},
+{
+    vol:1,
+    name:"一世風靡のハイボール",
+    glass:"角g",
+    recipe:"角45cc、ソーダ75cc",
+    garnish:"レモンピール",
+    history:"ハイボールブームを象徴する提供方法。"
+},
+{
+    vol:1,
+    name:"スモーキーハイボール",
+    glass:"角g",
+    recipe:"角45cc、ソーダ75cc",
+    garnish:"ラフロイグミスト",
+    history:"スモーキーな香りを追加したアレンジ。"
+},
+{
+    vol:1,
+    name:"ハイボール1923",
+    glass:"ファッション",
+    recipe:"角45cc、ソーダ45cc",
+    garnish:"バラ氷、レモンピール",
+    history:"1923はサントリー創業の年に由来する。"
+},
+{
+    vol:1,
+    name:"懐かしのコークハイ",
+    glass:"角g",
+    recipe:"角45cc、コーラ75cc",
+    garnish:"",
+    history:"定番のウイスキーコーラ。"
+},
+{
+    vol:1,
+    name:"グラスワイン、ネグロ",
+    glass:"ワイングラス、フルートグラス",
+    recipe:"各120cc",
+    garnish:"",
+    history:"ワイン提供の基本仕様。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol2.js に変更してください。
+
+window.vol2 = [
+{
+    vol:2,
+    name:"ロンドンドライジントニック",
+    glass:"角g",
+    recipe:"ビーフィーター47 40cc、ライムJ 5cc、トニック 60cc、ソーダ 15cc",
+    garnish:"ライムピール",
+    history:"1910年代以降に広まったジントニックの店舗レシピ版。"
+},
+{
+    vol:2,
+    name:"オレンジジントニック",
+    glass:"12oz",
+    recipe:"ビーフィーター40 40cc、トニック 80cc",
+    garnish:"1/12オレンジ絞り込み、Lマドラー",
+    history:"オレンジの香りを加えたジントニックアレンジ。"
+},
+{
+    vol:2,
+    name:"シトラスジントニック",
+    glass:"12oz",
+    recipe:"ビーフィーター40 40cc、トニック 80cc",
+    garnish:"1/16GFフルーツ絞り込み、Lマドラー",
+    history:"グレープフルーツを使ったシトラス系アレンジ。"
+},
+{
+    vol:2,
+    name:"○○ソーダ",
+    glass:"12oz",
+    recipe:"ベース40cc、ソーダ80cc",
+    garnish:"1/8レモン、Lマドラー",
+    history:"ジン・ウォッカ・ラム・テキーラ対応。"
+},
+{
+    vol:2,
+    name:"○○トニック",
+    glass:"12oz",
+    recipe:"ベース40cc、トニック80cc",
+    garnish:"1/8ライム、Lマドラー",
+    history:"ジン・ウォッカ・ラム・テキーラ対応。"
+},
+{
+    vol:2,
+    name:"○○リッキー",
+    glass:"12oz",
+    recipe:"ベース40cc、ソーダ80cc",
+    garnish:"1/8ライム絞り込み、Lマドラー",
+    history:"リッキーはライムを使用するのが特徴。"
+},
+{
+    vol:2,
+    name:"○○バック",
+    glass:"12oz",
+    recipe:"ベース40cc、ジンジャー80cc",
+    garnish:"1/8レモン絞り込み、Lマドラー",
+    history:"バック系はジンジャーエール使用。"
+},
+{
+    vol:2,
+    name:"ジンライム",
+    glass:"ファッション",
+    recipe:"ジン60cc、1/2ライム絞り込み",
+    garnish:"Sマドラー、4つ氷",
+    history:"シンプルなショートスタイル。"
+},
+{
+    vol:2,
+    name:"トムコリンズ",
+    glass:"コリンズ",
+    recipe:"ジン30cc、レモンJ10cc、パウダーシュガー2tsp、ソーダ55cc",
+    garnish:"Lマドラー、レモンスライス、レッドチェリー",
+    history:"19世紀アメリカ生まれのクラシックカクテル。"
+},
+{
+    vol:2,
+    name:"シンガポールスリング",
+    glass:"コリンズ",
+    recipe:"ジン30cc、レモンJ15cc、パウダーシュガー1tsp、ソーダ40cc、チェリーブランデー15cc",
+    garnish:"Lマドラー、レモンスライス、レッドチェリー",
+    history:"1915年にシンガポールのラッフルズ・ホテルで誕生。"
+},
+{
+    vol:2,
+    name:"マティーニ",
+    glass:"カクテル",
+    recipe:"ジン45cc、チンザノドライ15cc",
+    garnish:"スタッフドオリーブ、レモンピール",
+    history:"カクテルの王様と呼ばれる。"
+},
+{
+    vol:2,
+    name:"ギムレット",
+    glass:"カクテル",
+    recipe:"ジン45cc、ライムJ15cc、パウダーシュガー1tsp",
+    garnish:"",
+    history:"イギリス海軍が起源とされる。"
+},
+{
+    vol:2,
+    name:"ブルームーン",
+    glass:"カクテル",
+    recipe:"ジン30cc、バイオレット15cc、レモンJ15cc",
+    garnish:"",
+    history:"スミレの香りが特徴。"
+},
+{
+    vol:2,
+    name:"ホワイトレディ",
+    glass:"カクテル",
+    recipe:"ジン30cc、ホワイトキュラソー15cc、レモンJ15cc",
+    garnish:"",
+    history:"白い見た目が名前の由来。"
+},
+{
+    vol:2,
+    name:"ジンフィズ",
+    glass:"コリンズ",
+    recipe:"ジン30cc、レモンJ15cc、パウダーシュガー1tsp、ソーダ55cc",
+    garnish:"Lマドラー、レモンスライス",
+    history:"フィズは泡立つという意味。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol3.js に変更してください。
+
+window.vol3 = [
+{
+    vol:3,
+    name:"モスコミュール",
+    glass:"12oz",
+    recipe:"ウォッカ40cc、ライムJ5cc、ジンジャーエール80cc",
+    garnish:"Lマドラー、1/8ライム絞り込み",
+    history:"1940年代アメリカで誕生したウォッカカクテル。"
+},
+{
+    vol:3,
+    name:"スクリュードライバー",
+    glass:"12oz",
+    recipe:"ウォッカ40cc、オレンジジュース80cc",
+    garnish:"Lマドラー、1/12オレンジ",
+    history:"油田労働者がドライバーで混ぜたという説がある。"
+},
+{
+    vol:3,
+    name:"ブルドッグ",
+    glass:"12oz",
+    recipe:"ウォッカ40cc、グレープフルーツJ80cc",
+    garnish:"Lマドラー、1/16グレープフルーツ",
+    history:"ウォッカとグレープフルーツの定番。"
+},
+{
+    vol:3,
+    name:"ブラッディーメアリー",
+    glass:"12oz",
+    recipe:"ウォッカ40cc、トマトジュース80cc",
+    garnish:"Lマドラー、1/8レモン",
+    history:"イングランド女王メアリー1世が名前の由来とされる。"
+},
+{
+    vol:3,
+    name:"ソルティドッグ",
+    glass:"ソルティドッグ",
+    recipe:"ウォッカ40cc、グレープフルーツJ80cc",
+    garnish:"スノースタイル",
+    history:"グラスの塩が特徴の代表的カクテル。"
+},
+{
+    vol:3,
+    name:"ブラックルシアン",
+    glass:"ファッション",
+    recipe:"ウォッカ30cc、カルーア15cc",
+    garnish:"",
+    history:"1940年代にベルギーで誕生。"
+},
+{
+    vol:3,
+    name:"バラライカ",
+    glass:"カクテル",
+    recipe:"ウォッカ30cc、ホワイトキュラソー15cc、レモンJ15cc",
+    garnish:"",
+    history:"ロシアの民族楽器バラライカに由来する。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol4.js に変更してください。
+
+window.vol4 = [
+{
+    vol:4,
+    name:"キューバリブレ",
+    glass:"12oz",
+    recipe:"ラム40cc、コーラ80cc",
+    garnish:"Lマドラー、1/8ライム絞り込み",
+    history:"キューバ独立戦争の勝利を祝って誕生したとされる。"
+},
+{
+    vol:4,
+    name:"ラムトニック",
+    glass:"12oz",
+    recipe:"ラム40cc、トニック80cc",
+    garnish:"Lマドラー、1/8ライム",
+    history:"ラムを使った定番ロングカクテル。"
+},
+{
+    vol:4,
+    name:"ラムバック",
+    glass:"12oz",
+    recipe:"ラム40cc、ジンジャーエール80cc",
+    garnish:"Lマドラー、1/8レモン絞り込み",
+    history:"バック系はジンジャーエールを使用する。"
+},
+{
+    vol:4,
+    name:"テキーラサンライズ",
+    glass:"12oz",
+    recipe:"テキーラ40cc、オレンジジュース80cc、グレナデン10cc",
+    garnish:"Lマドラー、1/12オレンジ",
+    history:"日の出をイメージした見た目が名前の由来。"
+},
+{
+    vol:4,
+    name:"メキシコーク",
+    glass:"12oz",
+    recipe:"テキーラ40cc、コーラ80cc",
+    garnish:"Lマドラー、1/8ライム絞り込み",
+    history:"テキーラベースのコーラカクテル。"
+},
+{
+    vol:4,
+    name:"テキーラトニック",
+    glass:"12oz",
+    recipe:"テキーラ40cc、トニック80cc",
+    garnish:"Lマドラー、1/8ライム",
+    history:"シンプルで飲みやすいテキーラカクテル。"
+},
+{
+    vol:4,
+    name:"マルガリータ",
+    glass:"カクテル",
+    recipe:"テキーラ30cc、ホワイトキュラソー15cc、レモンJ15cc",
+    garnish:"スノースタイル",
+    history:"世界的に有名なテキーラベースのショートカクテル。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol5.js に変更してください。
+
+window.vol5 = [
+{
+    vol:5,
+    name:"ゴッドファーザー",
+    glass:"ファッション",
+    recipe:"デュワーズ45cc、アマレット15cc",
+    garnish:"ロック氷",
+    history:"ウイスキーとアマレットを合わせた代表的な食後酒カクテル。映画『ゴッドファーザー』に由来するとされる。"
+},
+{
+    vol:5,
+    name:"マンハッタン",
+    glass:"カクテル",
+    recipe:"CC40cc、チンザノロッソ20cc、アロマティックビターズ1dash",
+    garnish:"レッドチェリー",
+    history:"19世紀後半にニューヨークで誕生したとされ、『カクテルの女王』とも呼ばれる。"
+},
+{
+    vol:5,
+    name:"サイドカー",
+    glass:"カクテル",
+    recipe:"カミュ30cc、ホワイトキュラソー15cc、レモンJ15cc",
+    garnish:"",
+    history:"第一次世界大戦後のフランスで誕生したとされるブランデーカクテル。"
+},
+{
+    vol:5,
+    name:"アレキサンダー",
+    glass:"カクテル",
+    recipe:"カミュ30cc、カカオブラウン15cc、生クリーム（スジャータ）15cc",
+    garnish:"",
+    history:"ブランデーとカカオ、生クリームを合わせたデザートカクテルの代表格。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol6.js に変更してください。
+
+window.vol6 = [
+{
+    vol:6,
+    name:"キール",
+    glass:"フルート",
+    recipe:"カシス20cc、シャルドネ100cc",
+    garnish:"",
+    history:"白ワインにカシスを加えるフランス生まれのカクテル。"
+},
+{
+    vol:6,
+    name:"キールロワイヤル",
+    glass:"フルート",
+    recipe:"カシス20cc、コルドンネグロ100cc",
+    garnish:"",
+    history:"キールをスパークリングワインで作る華やかなアレンジ。"
+},
+{
+    vol:6,
+    name:"ミモザ",
+    glass:"フルート",
+    recipe:"OJ60cc、コルドンネグロ60cc",
+    garnish:"",
+    history:"黄色い花ミモザに見た目が似ていることが名前の由来。"
+},
+{
+    vol:6,
+    name:"ワインクーラー",
+    glass:"ワイングラス",
+    recipe:"ペシェ20cc、OJ20cc、シャルドネ80cc、グレナデン10cc",
+    garnish:"細口ストロー2本、1/12オレンジ、クラッシュアイス",
+    history:"フルーティーで飲みやすいワインカクテル。"
+},
+{
+    vol:6,
+    name:"アメリカンレモネード",
+    glass:"ワイングラス",
+    recipe:"レモンJ40cc、パウダーシュガー3tsp、水80cc、カベルネ40cc",
+    garnish:"細口ストロー2本、レモンスライス、2個氷",
+    history:"赤ワインをフロートさせる見た目が特徴のカクテル。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol7.js に変更してください。
+
+window.vol7 = [
+{
+    vol:7,
+    name:"カシスオレンジ",
+    glass:"12oz",
+    recipe:"カシス40cc、OJ80cc",
+    garnish:"Lマドラー、1/12オレンジ",
+    history:"世界中で親しまれている定番カシスカクテル。"
+},
+{
+    vol:7,
+    name:"カシスウーロン",
+    glass:"12oz",
+    recipe:"カシス40cc、ウーロン茶80cc",
+    garnish:"Lマドラー",
+    history:"甘さを抑えた飲みやすいカシスカクテル。"
+},
+{
+    vol:7,
+    name:"パライソグレープフルーツ",
+    glass:"12oz",
+    recipe:"パライソ40cc、グレープフルーツJ80cc",
+    garnish:"Lマドラー、1/16グレープフルーツ",
+    history:"パライソのライチの香りとグレープフルーツの相性が良い。"
+},
+{
+    vol:7,
+    name:"チャイナブルー",
+    glass:"12oz",
+    recipe:"パライソ30cc、グレープフルーツJ30cc、トニック50cc、ブルーキュラソー10cc",
+    garnish:"Lマドラー、1/16グレープフルーツ",
+    history:"日本で人気のライチ系カクテル。"
+},
+{
+    vol:7,
+    name:"ファジーネーブル",
+    glass:"12oz",
+    recipe:"ペシェ40cc、OJ80cc",
+    garnish:"Lマドラー、1/12オレンジ",
+    history:"桃の甘味が特徴の定番カクテル。"
+},
+{
+    vol:7,
+    name:"スプモーニ",
+    glass:"12oz",
+    recipe:"カンパリ30cc、グレープフルーツJ30cc、トニック60cc",
+    garnish:"Lマドラー、1/16グレープフルーツ",
+    history:"イタリア生まれのビター系カクテル。"
+},
+{
+    vol:7,
+    name:"ヨーグリートパイン",
+    glass:"10oz",
+    recipe:"ヨーグリート30cc、パインJ70cc",
+    garnish:"レモンスライス",
+    history:"ヨーグルトリキュールの爽やかなカクテル。"
+},
+{
+    vol:7,
+    name:"照葉樹林",
+    glass:"コリンズ",
+    recipe:"グリーンティー30cc、ウーロン茶70cc",
+    garnish:"Lマドラー",
+    history:"緑と茶色の見た目が照葉樹林を連想させる。"
+},
+{
+    vol:7,
+    name:"カルアミルク",
+    glass:"ファッション",
+    recipe:"カルーア30cc、牛乳70cc",
+    garnish:"Sマドラー",
+    history:"コーヒーリキュールを使った定番デザートカクテル。"
+},
+{
+    vol:7,
+    name:"マリブパイン",
+    glass:"10oz",
+    recipe:"マリブ30cc、パインJ70cc",
+    garnish:"レモンスライス",
+    history:"ココナッツの香りが特徴。"
+},
+{
+    vol:7,
+    name:"アプリコットクーラー",
+    glass:"コリンズ",
+    recipe:"アプリコットブランデー30cc、レモンJ15cc、グレナデン10cc、ソーダ45cc",
+    garnish:"Lマドラー、レモンスライス、レッドチェリー",
+    history:"甘酸っぱい味わいのロングカクテル。"
+}
+];
+
+</script>
+<script>
+// GitHubへアップロードする際は、このファイル名を vol8.js に変更してください。
+// 資料画像 Vol.8（ビア・ソフト）準拠版
+
+window.vol8 = [
+{
+    vol:8,
+    name:"シャンディーガフ",
+    glass:"小ピルスナー",
+    recipe:"ジンジャーエール150cc、ドラフト150cc",
+    garnish:"",
+    history:"ビールとジンジャーエールを合わせる代表的なビアカクテル。"
+},
+{
+    vol:8,
+    name:"レッドアイ",
+    glass:"小ピルスナー",
+    recipe:"トマトジュース150cc、ドラフト150cc",
+    garnish:"",
+    history:"ビールとトマトジュースを合わせる定番のビアカクテル。"
+},
+{
+    vol:8,
+    name:"オレンジジュース",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"グレープフルーツJ",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"クランベリージュース",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"パイナップルジュース",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"ウーロン茶",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"トマトジュース",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"ジンジャーエール",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+},
+{
+    vol:8,
+    name:"ペプシコーラ",
+    glass:"10oz",
+    recipe:"100cc",
+    garnish:"",
+    history:"店舗ソフトドリンクメニュー。"
+}
+];
+
+</script>
+<script>
+
+const all=[...(window.vol1||[]),...(window.vol2||[]),...(window.vol3||[]),...(window.vol4||[]),...(window.vol5||[]),...(window.vol6||[]),...(window.vol7||[]),...(window.vol8||[])];
+
+let selected=[],pool=[],index=0,correct=0,answered=[];
+
+function home(){
+document.getElementById("app").innerHTML=`
+<h1>Cocktail Study</h1>
+${[1,2,3,4,5,6,7,8].map(v=>`<label><input type="checkbox" class="vol" value="${v}" checked>Vol${v}</label><br>`).join("")}
+<button onclick="start()">順番学習</button>`;
+}
+
+function start(){
+selected=[...document.querySelectorAll(".vol:checked")].map(x=>Number(x.value));
+pool=all.filter(x=>selected.includes(Number(x.vol)));
+index=0;
+correct=0;
+answered=[];
+if(pool.length===0){alert("Volを選択してください");return;}
+show();
+}
+
+function normalize(s){
+return s.toLowerCase()
+.replace(/cc/g,"")
+.replace(/[、,\s　]/g,"");
+}
+
+function show(){
+const q=pool[index];
+document.getElementById("app").innerHTML=`
+<button onclick="home()">ホーム</button>
+<button onclick="back()">戻る</button>
+<div>${index+1}/${pool.length}</div>
+<h2>問題</h2>
+<h1>${q.name}</h1>
+<input id="answer" placeholder="レシピを入力">
+<button onclick="showHint()">ヒント（グラス表示）</button>
+<div id="hintArea"></div>
+<button onclick="judge()">解答する</button>`;
+}
+
+
+function showHint(){
+const q=pool[index];
+document.getElementById("hintArea").innerHTML=`
+<p>グラス: ${q.glass}</p>
+`;
+}
+
+function judge(){
+if(answered[index]) return;
+
+const q=pool[index];
+const user=normalize(document.getElementById("answer").value);
+
+const tokens=q.recipe.split("、").map(x=>normalize(x));
+const ok=tokens.every(t=>user.includes(t));
+
+answered[index]=true;
+if(ok) correct++;
+
+document.getElementById("app").innerHTML+=`
+<hr>
+<h2>${ok?"○ 正解":"× 不正解"}</h2>
+<p>正解: ${q.recipe}</p>
+<p>グラス: ${q.glass}</p>
+<p>付属: ${q.garnish||"なし"}</p>
+<p>${q.history||""}</p>
+<button onclick="next()">次の問題</button>`;
+}
+
+function next(){
+index++;
+if(index>=pool.length){
+document.getElementById("app").innerHTML=`
+<h1>採点結果</h1>
+<p>${pool.length}問中 ${correct}問正解</p>
+<p>正答率 ${Math.round(correct/pool.length*100)}%</p>
+<button onclick="home()">ホーム</button>`;
+return;
+}
+show();
+}
+
+function back(){
+if(index===0){alert("1問目の問題です");return;}
+index--;
+show();
+}
+
+window.onload=home;
+
+</script>
+</body></html>
