@@ -748,6 +748,7 @@ let wrongQuestions=[];
 let currentWrong=[];
 let retryMode=false;
 let quizMode="text";
+let choiceHintLevel=0;
 
 let stats=JSON.parse(localStorage.getItem("cocktailStats")||'{"plays":0,"correct":0,"wrong":0,"vol":{}}');
 
@@ -999,6 +1000,7 @@ function shuffle(a){
 
 function showChoiceQuestion(){
  const q=pool[index];
+ choiceHintLevel=0;
  const correctRecipe=q.recipe.split("、");
  let materials=[...correctRecipe];
 
@@ -1017,10 +1019,28 @@ function showChoiceQuestion(){
  <div>${index+1}/${pool.length}</div>
  <h2>問題</h2>
  <h1>${q.name}</h1>
+ <button onclick="showChoiceHint()">ヒント</button>
+ <div id="choiceHintArea"></div>
  <p>材料を選択してください</p>
  ${materials.map((m,i)=>`<label><input type="checkbox" class="mat" value="${m}">${m}</label><br>`).join("")}
  <button onclick="judgeChoice()">決定</button>`;
 }
+
+
+function showChoiceHint(){
+ const q=pool[index];
+ choiceHintLevel++;
+ let base=q.recipe.split("、")[0];
+
+ if(choiceHintLevel===1){
+   document.getElementById("choiceHintArea").innerHTML=`<div class="card">グラス: ${q.glass}</div>`;
+ }else if(choiceHintLevel===2){
+   document.getElementById("choiceHintArea").innerHTML=`<div class="card">グラス: ${q.glass}<br>付属: ${q.garnish||"なし"}</div>`;
+ }else{
+   document.getElementById("choiceHintArea").innerHTML=`<div class="card">グラス: ${q.glass}<br>付属: ${q.garnish||"なし"}<br>ベース: ${base}</div>`;
+ }
+}
+
 
 function judgeChoice(){
  const q=pool[index];
