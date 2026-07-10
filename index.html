@@ -1064,6 +1064,16 @@ function nextChoice(){
 }
 
 
+
+function inferTechnique(x){
+ if(x.name==="モヒート") return "ビルド（ミントをマドルして潰す）";
+ if(["マティーニ","マンハッタン"].includes(x.name)) return "ステア";
+ if(["ギムレット","ブルームーン","ホワイトレディ","バラライカ","マルガリータ","サイドカー","アレキサンダー"].includes(x.name)) return "シェイク";
+ if(x.name==="アメリカンレモネード") return "ビルド（赤ワインをフロート）";
+ if(x.garnish && x.garnish.includes("スノースタイル")) return "ビルド（スノースタイル）";
+ return "ビルド";
+}
+
 function showRecipeVolumes(){
  document.getElementById("app").innerHTML=`
  <h1>レシピ表</h1>
@@ -1087,7 +1097,7 @@ function showRecipeVol(v){
    <h3>${x.name}</h3>
    <div><b>レシピ</b><br>${x.recipe}</div>
    <div><b>グラス</b> ${x.glass}</div>
-   <div><b>付属</b> ${x.garnish||"なし"}</div>
+   <div><b>付属</b> ${x.garnish||"なし"}</div>\n   <div><b>技法</b> ${x.technique || inferTechnique(x)}</div>
    <div style="margin-top:10px;line-height:1.6;text-align:left;">
       <b>解説</b><br>
       ${x.detailHistory || x.history || "解説未登録"}
